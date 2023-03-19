@@ -1,26 +1,28 @@
 import { useMutation } from "react-query";
 import { useFormik } from "formik";
 import { createTicket } from "../api/tickets"
+import { useNavigate } from 'react-router-dom';
 
 function TicketCreation() {
-    const {
-        data,
-        error,
-        isLoading,
-        mutate,
-    } = useMutation(createTicket, {
-        onSuccess: (data) => {
-            console.log("created !");
-        }
-    })
+    
+  const navigate = useNavigate();
+  const {
+    mutate,
+  } = useMutation(createTicket, {
+    onSuccess: (data) => {
+      console.log("created !");
+      navigate('/tickets/')
 
-    const { values, errors, handleChange, handleSubmit } = useFormik({
-        initialValues: {
-            zone: '',
-            priority: '',
-        },
-        onSubmit: (values) => mutate(values),
-    })
+    }
+  })
+
+  const { values, handleChange, handleSubmit } = useFormik({
+    initialValues: {
+      zone: '',
+      priority: '',
+    },
+    onSubmit: (values) => mutate(values),
+  })
 
   return (
     <div className="container mt-5">

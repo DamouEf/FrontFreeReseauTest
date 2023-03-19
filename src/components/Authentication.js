@@ -1,26 +1,27 @@
 import { useMutation } from "react-query";
 import { useFormik } from "formik";
 import { login } from "../api/login"
+import { useNavigate } from 'react-router-dom';
 
 function Authentication() {
-    const {
-        data,
-        error,
-        isLoading,
-        mutate,
-    } = useMutation(login, {
-        onSuccess: (data) => {
-            localStorage.setItem('access', data.access)
-        }
-    })
+  const navigate = useNavigate();
 
-    const { values, errors, handleChange, handleSubmit } = useFormik({
-        initialValues: {
-            username: '',
-            password: '',
-        },
-        onSubmit: (values) => mutate(values),
-    })
+  const {
+    mutate,
+  } = useMutation(login, {
+    onSuccess: (data) => {
+      localStorage.setItem('access', data.access);
+      navigate(`/tickets/`);
+    }
+  })
+
+  const { values, errors, handleChange, handleSubmit } = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    onSubmit: (values) => mutate(values),
+  })
 
   return (
     <div className="container mt-5">

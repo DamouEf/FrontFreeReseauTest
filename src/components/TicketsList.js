@@ -1,12 +1,15 @@
 import { useQuery, useMutation, queryCache } from "react-query";
+import { useNavigate } from 'react-router-dom';
 import { getTickets, deleteTicket } from "../api/tickets";
 
 function TicketList() {
   const { data, error, isLoading } = useQuery("tickets", getTickets);
+  const navigate = useNavigate();
+
 
   const deleteTicketMutation = useMutation(deleteTicket, {
     onSuccess: () => {
-      queryCache.invalidateQueries("tickets");
+      navigate(0)
     },
   });
 
@@ -16,6 +19,12 @@ function TicketList() {
 
   return (
     <div className="container">
+      <button
+        className="btn btn-success btn-sm"
+        onClick={() => navigate("new")}
+      >
+        New
+      </button>
       <div className="row">
         <div className="col-md-6 mx-auto mt-5">
           {isLoading ? (
@@ -38,6 +47,12 @@ function TicketList() {
                     onClick={() => handleDelete(ticket.id)}
                   >
                     Delete
+                  </button>
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => navigate(`/tickets/${ticket.id}`)}
+                  >
+                    Update
                   </button>
                 </li>
               ))}

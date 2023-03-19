@@ -9,6 +9,18 @@ export const getTickets = () => {
     }).then(response => response.json());
 }
 
+export const getTicket = (id) => {
+    const accessToken = localStorage.getItem('access')
+    return fetch(`${process.env.REACT_APP_API_URL}/tickets/${id}/`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        },
+    }).then(response => response.json());
+}
+
+
 export const deleteTicket = (id) => {
     const accessToken = localStorage.getItem('access')
     return fetch(`${process.env.REACT_APP_API_URL}/tickets/${id}/`, {
@@ -17,6 +29,18 @@ export const deleteTicket = (id) => {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`
         },
+    }).then(response => console.log("deleted"));
+}
+
+export const updateTicket = (ticket) => {
+    const accessToken = localStorage.getItem('access')
+    return fetch(`${process.env.REACT_APP_API_URL}/tickets/${ticket.id}/`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify(ticket)
     }).then(response => response.json());
 }
 
