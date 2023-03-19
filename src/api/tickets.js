@@ -19,3 +19,15 @@ export const deleteTicket = (id) => {
         },
     }).then(response => response.json());
 }
+
+export const createTicket = ({ zone, priority }) => {
+    const accessToken = localStorage.getItem('access')
+    return fetch(`${process.env.REACT_APP_API_URL}/tickets/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({ zone, priority }),
+    }).then(response => response.json());
+}
