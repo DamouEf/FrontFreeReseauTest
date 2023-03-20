@@ -1,26 +1,29 @@
 import { useMutation } from "react-query";
+import { useNavigate, Link } from 'react-router-dom';
 import { useFormik } from "formik";
 import { login } from "../api/login"
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthProvider';
+
 
 function Authentication() {
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const {
-    mutate,
-  } = useMutation(login, {
-    onSuccess: (data) => {
-      localStorage.setItem('access', data.access);
-      navigate(`/tickets/`);
-    }
-  })
+    mutateAsync,
+  } = useMutation(login)
 
   const { values, errors, handleChange, handleSubmit } = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
-    onSubmit: (values) => mutate(values),
+    onSubmit: async (values) => {
+      const data = await mutateAsync(values)
+      localStorage.setItem('access', data.access);
+      auth.login();
+      navigate(`tickets/`);
+    },
   })
 
   return (
